@@ -16,16 +16,19 @@ public class UserController {
     private final UserMapper userMapper;
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity getAllUsers(){
+    public ResponseEntity getAllUsers() {
         return new ResponseEntity(userMapper.findAll(), HttpStatus.OK);
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity createUser(@RequestBody User data){
-        int id = userMapper.insert(data);
-        System.out.println(id);
+    public ResponseEntity createUser(@RequestBody User data) {
+        userMapper.insert(data);
+        return new ResponseEntity(userMapper.findAll(), HttpStatus.CREATED);
+    }
 
-        return new ResponseEntity(userMapper.findAll(), HttpStatus.OK);
+    @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity getUserById(@PathVariable("id") int id) {
+        return new ResponseEntity(userMapper.getUserById(id), HttpStatus.OK);
     }
 
 }
